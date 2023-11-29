@@ -1,0 +1,12 @@
+openpyxl
+urllib3==1.25.11
+fastapi
+openai_function_call
+agent_protocol
+apscheduler
+pytz
+ujson
+lark_oapi
+gevent
+gunicorn
+python-dotenv
