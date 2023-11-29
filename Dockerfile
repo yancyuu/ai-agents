@@ -1,7 +1,7 @@
 # 需要在之前执行下面两句
-# 1. docker build -t skg-script-base -f init .
-# 2. docker tag skg-script-base base:v2.0
-FROM skg-script-base:v2.0
+# 1. docker build -t ai-agent-base -f init .
+# 2. docker tag ai-agent-base ai-base:v1.0
+FROM ai-base:v1.0
 
 ENV APPNAME='skg-script'
 ENV API_VERESION=v1.0
