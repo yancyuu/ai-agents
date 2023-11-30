@@ -7,7 +7,7 @@ apscheduler
 pytz
 ujson
 lark_oapi
-gevent
+uvicorn
 gunicorn
 python-dotenv
 tenacity
