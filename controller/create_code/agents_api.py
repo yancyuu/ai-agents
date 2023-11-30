@@ -5,10 +5,12 @@ from controller.create_code.prompts import Prompts
 from agent_protocol import Agent, Step, Task
 
 
-class AgentsAPI(str, enum.Enum):
+class AgentsType(str, enum.Enum):
     PLAN = "plan"
     SPECIFY_FILE_PATHS = "specify_file_paths"
     GENERATE_CODE = "generate_code"
+
+class AgentsAPI:
 
     def __init__(self) -> None:
         super().__init__()
@@ -19,14 +21,13 @@ class AgentsAPI(str, enum.Enum):
         shared_deps = self.prompt.plan(task.input)
         await Agent.db.create_step(
             step.task_id,
-            AgentsAPI.SPECIFY_FILE_PATHS,
+            AgentsType.SPECIFY_FILE_PATHS,
             additional_properties={
                 "shared_deps": shared_deps,
             },
         )
         step.output = shared_deps
         return step
-
 
     async def _generate_file_paths(self, task: Task, step: Step) -> Step:
         shared_deps = step.additional_properties["shared_deps"]
@@ -70,21 +71,18 @@ class AgentsAPI(str, enum.Enum):
             relative_path=str(path.parent),
             file_name=path.name,
         )
-
         return step
-
 
     async def task_handler(self, task: Task) -> None:
         if not task.input:
             raise Exception("No task prompt")
-        await Agent.db.create_step(task.task_id, AgentsAPI.PLAN)
-
+        await Agent.db.create_step(task.task_id, AgentsType.PLAN)
 
     async def step_handler(self, step: Step):
         task = await Agent.db.get_task(step.task_id)
-        if step.name == AgentsAPI.PLAN:
+        if step.name == AgentsType.PLAN:
             return await self._generate_shared_deps(step)
-        elif step.name == AgentsAPI.SPECIFY_FILE_PATHS:
+        elif step.name == AgentsType.SPECIFY_FILE_PATHS:
             return await self._generate_file_paths(task, step)
         else:
             return await self._generate_code(task, step)

@@ -17,8 +17,8 @@ threads = 1
 # 等待队列最大长度,超过这个长度的链接将被拒绝连接
 backlog = 2048
 
-# 工作模式--协程
-worker_class = "gevent"
+# 工作模式--ASGI 工作器
+worker_class = "uvicorn.workers.UvicornWorker"
 
 # 最大客户客户端并发数量,对使用线程和协程的worker的工作有影响
 # 服务器配置设置的值  1200：中小型项目  上万并发： 中大型
