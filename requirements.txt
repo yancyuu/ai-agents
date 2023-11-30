@@ -8,6 +8,5 @@ pytz
 ujson
 lark_oapi
 uvicorn
-gunicorn
 python-dotenv
 tenacity

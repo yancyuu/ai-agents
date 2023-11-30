@@ -12,4 +12,4 @@ ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION "python"
 COPY . /app
 WORKDIR /app
 
-CMD ["gunicorn","-c","config.py","app:agent"]
+CMD ["python","app.py"]
