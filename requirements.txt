@@ -10,3 +10,4 @@ lark_oapi
 gevent
 gunicorn
 python-dotenv
+tenacity
