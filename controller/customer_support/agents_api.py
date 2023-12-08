@@ -61,7 +61,7 @@ class AgentsAPI(BaseController):
     async def _get_tool(self, step: Step, model) -> Step:
         """找工具的步骤"""
         task = await Agent.db.get_task(step.task_id)
-        select_tool = self.determine_tool_type(task.input, model=model)
+        select_tool = await self.determine_tool_type(task.input, model=model)
         await Agent.db.create_step(
         step.task_id,
         AgentsType.GET_TOOL,
@@ -75,7 +75,7 @@ class AgentsAPI(BaseController):
 
     async def _generate_reply(self, task: Task, step: Step, model) -> Step:
         select_tool = step.additional_properties["select_tool"]
-        reply = self.generate_reply_sync(task.input, select_tool, model=model)
+        reply = await self.generate_reply(task.input, select_tool, model=model)
         await Agent.db.create_step(
             step.task_id,
             AgentsType.GENERATE_REPLY,
@@ -88,7 +88,7 @@ class AgentsAPI(BaseController):
 
     async def task_handler(self, task: Task) -> None:
         if not task.input:
-            raise Exception("No task prompt")
+            return {"errcode": 1001 , "data": "No task prompt"}
         await Agent.db.create_step(task.task_id, AgentsType.GET_TOOL)
 
 

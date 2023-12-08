@@ -59,12 +59,13 @@ class BaseController:
                 }, 
                 call=None))
 
-    def determine_tool_type(self, prompt, model="gpt-3.5-turbo"):
+    async def determine_tool_type(self, prompt, model="gpt-3.5-turbo"):
         """判断用户意图"""
         apikey_list = self.api_keys.split(",")   
         # 随机选择一个apikey
         openai.api_key = random.choice(apikey_list)
-        completion = openai.ChatCompletion.create(
+        logger.info(f"get_all_tool_datas  {self.tool_registry.get_all_tool_datas()}")
+        completion = await openai.ChatCompletion.acreate(
             model=model,
             temperature=0.7,
             tools=self.tool_registry.get_all_tool_datas(),
@@ -80,12 +81,13 @@ class BaseController:
                 }
             ],
         )
+        logger.info(f"completion  {completion}")
         # 解析响应以提取生成的函数参数
         if "tool_calls" in completion.json()["choices"][0]["message"]:
             select_tool_type = completion.json()["choices"][0]["message"]["tool_calls"][0]["function"]["arguments"]
-            print(select_tool_type)
+            logger.info(f"select_tool_type  {select_tool_type}")
             return select_tool_type
-        print("没有生成有效的函数调用参数。")
+        logger.info(f"没有生成有效的函数调用")
         return
 
     @retry(wait=wait_random_exponential(multiplier=1, max=40), stop=stop_after_attempt(3))
@@ -96,14 +98,14 @@ class BaseController:
         apikey_list = self.api_keys.split(",")   
         # 随机选择一个apikey
         openai.api_key = random.choice(apikey_list)
-        completion = openai.ChatCompletion.create(
+        completion = await openai.ChatCompletion.acreate(
             model=model,
             temperature=0.7,
             tools=[selected_tool.data],
             messages=[
                 {
                     "role": "system",
-                    "content": f"""{BaseActions.SYSTEM_PROMPT}
+                    "content": f"""{self.SYSTEM_PROMPT}
 
         回应用户，编写一个计划，在这个计划中，你需要得到用户输入的参数，去找到自己需要的参数并返回。
                     """,
