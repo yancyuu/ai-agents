@@ -28,10 +28,8 @@ class BaseController:
 
     def __init__(self, registry: ToolRegistry) -> None:
         # 这里的apikey其实是oneapi的key, 此项目不做apikey的分发管理。
-        if get_env("OPENAI_API_BASE"):
-            openai.api_base = get_env("OPENAI_API_BASE")
+        openai.api_base = get_env("OPENAI_API_BASE")
         self.api_keys = get_env("OPENAI_API_KEY")
-        self.model = get_env("OPENAI_MODEL", "gpt-3.5-turbo-0613")
         # 注册工具范式
         self.tool_registry = registry
         determine_tool_types = self.tool_registry.get_all_tool_names()
