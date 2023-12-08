@@ -14,7 +14,7 @@ from tenacity import (
     wait_random_exponential,
 )
     
-class BaseActions:
+class BaseController:
     '''基本的流程：
         1. 从一堆工具中选择合适的工具
         2. 用这个工具去引导用户输入

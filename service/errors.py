@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from service import error_codes
-import json
-
 
 class Error(Exception):
 

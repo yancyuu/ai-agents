@@ -2,4 +2,4 @@
 
 from controller.customer_support.agents_api import AgentsAPI
 
-customer_support_service = AgentsAPI()
+_customer_support_agents_api = AgentsAPI()

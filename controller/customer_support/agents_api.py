@@ -1,5 +1,5 @@
 from agent_protocol import Agent, Step, Task
-from controller.base_agent import BaseActions
+from controller.base_controller import BaseController
 from common_sdk.util.tools_utils import Tool, ToolRegistry
 from controller.customer_support.utils import get_order, transfer_to_human
 import enum
@@ -9,7 +9,7 @@ class AgentsType(str, enum.Enum):
     GET_TOOL = "get_tool"
     GENERATE_REPLY = "generate_reply"
 
-class AgentsAPI(BaseActions):
+class AgentsAPI(BaseController):
     """这里的api都是BaseActions的父类，可以复用其中的工具和流程"""
     
     SYSTEM_PROMPT = """
